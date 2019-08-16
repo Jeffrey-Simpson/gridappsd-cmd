@@ -1,0 +1,10 @@
+name: gridappsd-cmd
+channels:
+  - defaults
+dependencies:
+- python=3.7
+- pandas
+- pip
+- pip:
+#  - --editable=git+git@github.nrel.gov:aces/glm.git#egg=glm
+  - --editable=git+git://github.com/GRIDAPPSD/gridappsd-python.git#egg=gridappsd-python
