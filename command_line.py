@@ -1,3 +1,31 @@
+# Copyright (c) 2019 Alliance for Sustainable Energy, LLC
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+#    list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import json
 import argparse
 import time
@@ -5,20 +33,27 @@ import command_builder
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    example1 = '''# List switches\npython command_line.py  -f _AAE94E4A-2465-6F5E-37B1-3E72183A4E44 -l switch\n'''
+    example2 = '''# Open switch ln2000901_sw for two minutes 
+python command_line.py -i 1752306429 -f _EBDB5A4A-543C-9025-243E-8CAD24307380 -s ln2000901_sw -fv 1 -rv 0 -od 1374510840 -sd 1374510960'''
+    parser = argparse.ArgumentParser(description='Command line utility to create and send events to the'
+                                                 'GridAPPS-D platform', usage='python %(prog)s [options] \nExamples:\n' + example1
+                                                                              + example2)
     parser.add_argument("-i", "--id", type=int, help="simulation id", required=False)
     parser.add_argument("-f", "--feeder_id", type=str, help="feeder id", default='_AAE94E4A-2465-6F5E-37B1-3E72183A4E44', required=False)
-    parser.add_argument("-l", "--list", type=str, help="feeder type name", default=None, required=False)
+    parser.add_argument("-l", "--list", type=str, help="followed by equipment name or first letter of equipment,"
+                                                       " -l switch or -l regulator", default=None, required=False)
     parser.add_argument("-s", "--switch", type=str, help="switch name", default=None, required=False)
-    parser.add_argument("-p", "--pv", type=str, help="switch name", default=None, required=False)
-    parser.add_argument("-r", "--regulator", type=str, help="switch name", default=None, required=False)
-    parser.add_argument("-g", "--generator", type=str, help="switch name", default=None, required=False)
+    parser.add_argument("-p", "--pv", type=str, help="pv name", default=None, required=False)
+    parser.add_argument("-r", "--regulator", type=str, help="regulator name", default=None, required=False)
+    parser.add_argument("-g", "--generator", type=str, help="generator name", default=None, required=False)
     parser.add_argument("-fv", "--forward_values", nargs='+', type=float, help="forward values", default=0, required=False)
     parser.add_argument("-rv", "--reverse_values", nargs='+', type=float, help="reverse values", default=0, required=False)
     parser.add_argument("-od", "--occured_date_time", type=int, help="occured date time", default=None, required=False)
     parser.add_argument("-sd", "--stop_date_time", type=int, help="stop date time", default=None, required=False)
 
     args = parser.parse_args()
+    print(int(time.time()))
 
     # fid_select = '_67AB291F-DCCD-31B7-B499-338206B9828F'
     fid_select_123 = '_C1C3E687-6FFD-C753-582B-632A27E28507'
@@ -33,7 +68,11 @@ if __name__ == '__main__':
     command_builder.init(fid_select, simulation_id)
     # test()
     if args.list:
-        if args.list[0].lower() == 's':
+        if args.list[0].lower() == 'f':
+            for f in command_builder.feeder_name_list:
+                print(f['feeder_name'] + " " + f["fdrid"])
+            # print(json.dumps(command_builder.feeder_name_list,indent=2))
+        elif args.list[0].lower() == 's':
             print(json.dumps(command_builder.switch_name_map,indent=2))
         elif args.list[0].lower() == 'p':
             print(json.dumps(command_builder.pv_name_map,indent=2))
@@ -47,7 +86,7 @@ if __name__ == '__main__':
 
     msg = ''
     if args.regulator:
-        msg = command_builder.reg_msg(args.regulator,int(args.forward_values[0]), int(args.reverse_values[0]))
+        msg = command_builder.reg_msg(args.regulator, int(args.forward_values[0]), int(args.reverse_values[0]))
     elif args.switch:
         msg = command_builder.switch_msg(args.switch, int(args.forward_values[0]), int(args.reverse_values[0]))
     elif args.pv:
@@ -77,10 +116,12 @@ usage = '''
 python command_line.py -i 1083048786 -f _EBDB5A4A-543C-9025-243E-8CAD24307380 -s sw5 -fv 1 -rv 0 -od 1374510937 -sd 1374510997
 
 # List switch names
-python command_line.py  -f _AAE94E4A-2465-6F5E-37B1-3E72183A4E44 -l swi
+python command_line.py  -f _AAE94E4A-2465-6F5E-37B1-3E72183A4E44 -l switch
 # Open switch ln2000901_sw for two minutes 
-python command_line.py -i 1752306429 -f _EBDB5A4A-543C-9025-243E-8CAD24307380 -s ln2000901_sw -fv 1 -rv 0 -od 1374510840 -sd 1374510960 
+python command_line.py -i 1752306429 -f _EBDB5A4A-543C-9025-243E-8CAD24307380 -s ln2000901_sw -fv 1 -rv 0 -od 1374510840 -sd 1374510960
 
+ 
+python command_line.py  -f _C1C3E687-6FFD-C753-582B-632A27E28507 -l r
 
 '''
 

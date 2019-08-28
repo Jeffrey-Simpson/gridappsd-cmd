@@ -1,36 +1,44 @@
+# Copyright (c) 2019 Alliance for Sustainable Energy, LLC
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+#    list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import query_model_adms as query_model
 import json
-import argparse
 from gridappsd import GOSS, DifferenceBuilder
 from gridappsd.topics import simulation_input_topic, simulation_output_topic
 goss_sim = "goss.gridappsd.process.request.simulation"
 test_input = "/topic/goss.gridappsd.simulation.test.input."
 
+feeder_name_list = []
 switch_name_map = {}
 generator_name_map = {}
 reg_name_map = {}
 pv_name_map = {}
 simulation_id = 1
-# def create_message(object,attribute,forward_value,reverse_value):
-#     m = {
-#         "message": {
-#             "forward_differences": [
-#                 {
-#                     "object": object,
-#                     "attribute": attribute,
-#                     "value": forward_value
-#                 }
-#             ],
-#             "reverse_differences": [
-#                 {
-#                     "object": object,
-#                     "attribute": attribute,
-#                     "value": reverse_value
-#                 }
-#             ]
-#         }
-#     }
-#     return m
 
 def create_scheduled_message(msg,occuredDateTime,stopDateTime):
     m = {
@@ -53,7 +61,7 @@ def reg_msg(name,fv=1,rv=0):
         print('No regulator named ' + name)
         return None
     _diff = DifferenceBuilder(simulation_id)
-    _diff.add_difference(switch_name_map[name], "TapChanger.step", fv, rv)
+    _diff.add_difference(reg_name_map[name]['id'], "TapChanger.step", fv, rv)
     msg = _diff.get_message()
     return msg
 
@@ -105,39 +113,74 @@ def pv_msg(name,fv_p=0,fv_q=0,rv_p=0,rv_q=0):
 def send_command(msg):
     goss = GOSS()
     goss.connect()
-    print(json.dumps(msg,indent=2))
+    # print(json.dumps(msg,indent=2))
     request = json.dumps(msg)
     status = goss.send(simulation_input_topic(simulation_id), request)
+    print(status)
+
+
+def send_comm_outage(msg, occuredDateTime, stopDateTime):
+    goss = GOSS()
+    goss.connect()
+    request_status = {
+        "command": "new_events"  # new_events, update_events, query_events
+    }
+    msg['occuredDateTime'] = occuredDateTime
+    msg['stopDateTime'] = stopDateTime
+    request_status['events'] = [msg]
+    # print(json.dumps(request_status, indent=2))
+    request = json.dumps(request_status)
+    status = goss.get_response(test_input+str(simulation_id), request, timeout=120)
     print(status)
 
 
 def send_scheduled_command(msg, occuredDateTime, stopDateTime):
     goss = GOSS()
     goss.connect()
-    request_status = {
-        "command": "new_events"  # new_events, update_events, query_events
-    }
-    msg = create_scheduled_message(msg, occuredDateTime, stopDateTime)
-    request_status['events'] = [msg]
-    print(json.dumps(request_status,indent=2))
+    request_status = create_scheduled_command(msg, occuredDateTime, stopDateTime)
+    # print(json.dumps(request_status, indent=2))
     request = json.dumps(request_status)
     status = goss.get_response(test_input+str(simulation_id), request, timeout=120)
     print(status)
 
 
+def create_scheduled_command(msg, occuredDateTime, stopDateTime):
+    request_status = {
+        "command": "new_events"  # new_events, update_events, query_events
+    }
+    msg = create_scheduled_message(msg, occuredDateTime, stopDateTime)
+    request_status['events'] = [msg]
+
+    return request_status
+
+
+
 def init(fid_select, simulationID):
-    generators = query_model.get_generators(fid_select)
+
+    global feeder_name_list
     global generator_name_map
     global pv_name_map
     global reg_name_map
     global switch_name_map
     global simulation_id
     simulation_id = simulationID
+
+    result, name_map, node_name_map_va_power, node_name_map_pnv_voltage, \
+    pec_map, load_power_map, line_map, trans_map, cap_pos, tap_pos, \
+    load_voltage_map, line_voltage_map, trans_voltage_map = query_model.lookup_meas(fid_select)
+    # print(repr(pec_map))
+    feeder_name_list = query_model.get_feeder()
+    generators = query_model.get_generators(fid_select)
     generator_name_map = {generator['name']: generator['id'] for generator in generators}
     pvs = query_model.get_solar(fid_select)
+    # print(name_map)
     pv_name_map = {pv['name']: pv['id'] for pv in pvs}
+    pv_name_map = {pv['name']:{'id':pv['id'], 'power measurement': pec_map[pv['busname'].upper()+'.'+pv['busphase'][0]]} for pv in pvs}
     regs = query_model.get_regulator(fid_select)
-    reg_name_map = {reg['rname']: reg['id'] for reg in regs}
+    # reg_name_map = {reg['rname']: reg['id'] for reg in regs}
+    reg_name_map = {reg['rname']: {'id':reg['id'],
+                                   'pos measurement': tap_pos[reg['bus'].upper()+'.'+query_model.lookup[reg['phs'][0]]]}
+                                    for reg in regs}
     switches = query_model.get_switches(fid_select)
     switch_name_map = {switch['name']: switch['id'] for switch in switches}
 

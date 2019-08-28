@@ -1,3 +1,31 @@
+# Copyright (c) 2019 Alliance for Sustainable Energy, LLC
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+#    list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import math
 import cmath
 import numpy as np
@@ -41,19 +69,23 @@ else:
 
 
 # "SELECT ?name WHERE { ?s r:type c:Feeder. ?s c:IdentifiedObject.name ?name} ORDER by ?name"
-def get_feeder(feeder_name="j1"):
+def get_feeder():
     query = prefix + '''
     SELECT ?feeder_name ?fdrid WHERE {
                         ?s r:type c:Feeder. 
                         ?s c:IdentifiedObject.mRID ?fdrid.
                         ?s c:IdentifiedObject.name ?feeder_name
+                        }
                         ORDER by ?feeder_name
     '''
     results = gridappsd_obj.query_data(query)
     results_obj = results['data']
+    data = list()
     for b in results_obj['results']['bindings']:
-        print(b['feeder_name']['value'])
-        print(b['fdrid']['value'])
+        # print(b['feeder_name']['value'], b['fdrid']['value'])
+        datum = {thing[0]: thing[1]['value'] for thing in b.items()}
+        data.append(datum)
+    return data
 
 def get_feeder_name(value):
     fidselect = """ VALUES ?fdrid {\"""" + value + """\"} """
@@ -292,7 +324,7 @@ ORDER by ?name'''
 def get_regulator(value='_EBDB5A4A-543C-9025-243E-8CAD24307380'):
     fidselect = """ VALUES ?fdrid {\"""" + value + """\"} """
     query=prefix+'''
-SELECT ?rname ?id ?pname ?tname ?wnum ?phs ?incr ?mode ?enabled ?highStep ?lowStep ?neutralStep ?normalStep ?neutralU 
+SELECT ?rname ?id ?bus ?pname ?tname ?wnum ?phs ?incr ?mode ?enabled ?highStep ?lowStep ?neutralStep ?normalStep ?neutralU 
  ?step ?initDelay ?subDelay ?ltc ?vlim 
 	?vset ?vbw ?ldc ?fwdR ?fwdX ?revR ?revX ?discrete ?ctl_enabled ?ctlmode ?monphs ?ctRating ?ctRatio ?ptRatio
 WHERE {
@@ -303,6 +335,12 @@ WHERE {
  ?rtc c:IdentifiedObject.name ?rname.
  ?rtc c:IdentifiedObject.mRID ?id.
  ?rtc c:RatioTapChanger.TransformerEnd ?end.
+ 
+  ?end c:TransformerEnd.Terminal ?trm.
+ ?trm c:IdentifiedObject.mRID ?trmid.
+ ?trm c:Terminal.ConnectivityNode ?cn. 
+ ?cn c:IdentifiedObject.name ?bus.
+ 
  ?end c:TransformerEnd.endNumber ?wnum.
  OPTIONAL {?end c:TransformerTankEnd.phases ?phsraw.
   bind(strafter(str(?phsraw),"PhaseCode.") as ?phs)}
@@ -611,8 +649,10 @@ def lookup_meas(feeder =u'_4F76A5F9-271D-9EB8-5E31-AA362D86F2C3'):
 
 #         name_map[b['id']['value']] = b['name']['value']
 #         print(b['eqtype']['value'] )
-        name_map[b['trmid']['value']] = b['id']['value']
+#         name_map[b['trmid']['value']] = b['id']['value']
         name = b['bus']['value'].upper() + '.' + lookup[b['phases']['value']]
+        name_map[name] = b['id']['value']
+        # name_map[b['id']['value']] = name
         mrid_types.add(b['eqtype']['value'])
         if b['type']['value'] == 'Pos':
             if b['eqtype']['value'] == u'LinearShuntCompensator':
@@ -1001,6 +1041,9 @@ if __name__ == '__main__':
     # fid_select = '_4F76A5F9-271D-9EB8-5E31-AA362D86F2C3'
     fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'
     fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44'
+
+    get_feeder()
+
     pvs = get_solar(fid_select)
     print(pvs)
     exit(0)
