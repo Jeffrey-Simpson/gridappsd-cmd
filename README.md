@@ -10,6 +10,9 @@ simply type:
         conda env create -f environment.yml
         
 ## 
+Alternately you can install gridappsd-python and that should be the only dependency  
+pip install git+git://github.com/GRIDAPPSD/gridappsd-python/tree/app-in-container.git
+
 
 ## Example commands
         
@@ -38,10 +41,10 @@ python create_comm_outage.py
 
 ## Things to check if there are problems
 
-[] Make sure the simulaiton id is set correctly
-[] Make sure that the times of the events are correct
-[] Make sure the feeder id is correct
-[] Make sure the name of the object is correct
+- [ ] Make sure the simulaiton id is set correctly
+- [ ] Make sure that the times of the events are correct
+- [ ] Make sure the feeder id is correct
+- [ ] Make sure the name of the object is correct
 
 ```bash
 docker ps
@@ -52,7 +55,7 @@ docker exec -it <CONTAINER ID> bash
 mysql -u gridappsd -pgridappsd1234
 use gridappsd;
 select * from log where source = 'ProcessEvents';
-select * from log where soufncs_goss_bridge.py' and log_message LIKE '%phase_%';
+select * from log where source = 'fncs_goss_bridge.py' and log_message LIKE '%phase_%';
 ```
         
 ### List all switches for a feeder 
@@ -72,5 +75,5 @@ python command_line.py  -f _C1C3E687-6FFD-C753-582B-632A27E28507 -l r
 
 ### Open change tap 
 ```bash
-python command_line.py -i 1074602508 -f _C1C3E687-6FFD-C753-582B-632A27E28507 -s creg4a -fv 5 -rv 10 -od 1567008684 -sd 1567008754
+python command_line.py -i 1276630028 -f _C1C3E687-6FFD-C753-582B-632A27E28507 -r creg4a -fv 5 -rv 10 -od 1567025394 -sd 1567025574
 ```

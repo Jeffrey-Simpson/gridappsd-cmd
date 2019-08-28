@@ -173,7 +173,7 @@ def init(fid_select, simulationID):
     generators = query_model.get_generators(fid_select)
     generator_name_map = {generator['name']: generator['id'] for generator in generators}
     pvs = query_model.get_solar(fid_select)
-    # print(name_map)
+    # print(cap_pos)
     pv_name_map = {pv['name']: pv['id'] for pv in pvs}
     pv_name_map = {pv['name']:{'id':pv['id'], 'power measurement': pec_map[pv['busname'].upper()+'.'+pv['busphase'][0]]} for pv in pvs}
     regs = query_model.get_regulator(fid_select)

@@ -53,12 +53,12 @@ def create_pv_outage(pv_name_map, pvs):
 
     return outage_event
 
-def create_reg_outage(pv_name_map, regs):
+def create_reg_outage(reg_name_map, regs):
     for reg in regs:
-        obj_template = {"objectMRID": pv_name_map[reg]["id"],
+        obj_template = {"objectMRID": reg_name_map[reg]["id"],
                         "attribute": "TapChanger.step"}
         outage_event["inputOutageList"].append(obj_template)
-        # pv_event["outputOutageList"].append(pv_name_map[pv]["power measurement"])
+        outage_event["outputOutageList"].append(reg_name_map[reg]["pos measurement"])
 
     return outage_event
 
@@ -114,7 +114,7 @@ def test_123_reg():
 
 def test_123_reg_schedule():
     fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'
-    simulation_id = 2145327326
+    simulation_id = 474305352
     command_builder.init(fid_select, simulation_id)
 
     regs = ['creg4a', 'creg4b', 'creg4c']

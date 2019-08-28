@@ -33,22 +33,22 @@ import time
 if __name__ == '__main__':
     fid_select = '_EBDB5A4A-543C-9025-243E-8CAD24307380'
     # fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44' # test9500new
-    # fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'  # ieee123
+    fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'  # ieee123
 
-    simulation_id = 1799267111
+    simulation_id = 294428030
     command_builder.init(fid_select, simulation_id)
 
     # msg = command_builder.switch_msg('ln2000901_sw', 1, 0)
     # msg = command_builder.switch_msg('ln2000701_sw', 1, 0)
     # msg = command_builder.switch_msg('ln2001301_sw', 1, 0)
 
-    msg = command_builder.switch_msg('sw5', 1, 0)  # l118 197.1
+    msg = command_builder.switch_msg('sw5', 1, 0)  # plot with power s109a
 
     seconds = 1374510720
     seconds = 1374256800
-    # seconds = int(time.time())
+    seconds = int(time.time())
 
-    cmd_msg = command_builder.create_scheduled_command(msg, seconds + 30, seconds + 240)
+    cmd_msg = command_builder.create_scheduled_command(msg, seconds + 30, seconds + 120)
     with open('test_scheduled_switch.json', 'w') as outfile:
         json.dump(cmd_msg, outfile, indent=2)
 
