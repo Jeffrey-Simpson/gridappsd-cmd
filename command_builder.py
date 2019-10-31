@@ -34,6 +34,7 @@ goss_sim = "goss.gridappsd.process.request.simulation"
 test_input = "/topic/goss.gridappsd.simulation.test.input."
 
 feeder_name_list = []
+line_name_map = {}
 switch_name_map = {}
 generator_name_map = {}
 reg_name_map = {}
@@ -55,6 +56,19 @@ def create_scheduled_message(msg,occuredDateTime,stopDateTime):
     m['message']['forward_differences'] = msg['input']['message']['forward_differences']
     m['message']['reverse_differences'] = msg['input']['message']['reverse_differences']
     return m
+
+def create_fault(mrid,phase,occuredDateTime,stopDateTime):
+    event = {"PhaseConnectedFaultKind": "lineToGround",
+             "FaultImpedance": {
+                 "rGround": 0.001,
+                 "xGround": 0.001
+             },
+             "ObjectMRID": [mrid],
+             "phases": phase,
+             "event_type": "Fault",
+             "occuredDateTime": occuredDateTime,
+             "stopDateTime": stopDateTime
+             }
 
 def reg_msg(name,fv=1,rv=0):
     if name not in reg_name_map:
@@ -153,6 +167,10 @@ def create_scheduled_command(msg, occuredDateTime, stopDateTime):
 
     return request_status
 
+def create_scheduled_file(msg, occuredDateTime, stopDateTime):
+    msg = create_scheduled_message(msg, occuredDateTime, stopDateTime)
+    return {'commandEvents': [msg]}
+
 
 
 def init(fid_select, simulationID):
@@ -163,6 +181,7 @@ def init(fid_select, simulationID):
     global reg_name_map
     global switch_name_map
     global simulation_id
+    global line_name_map
     simulation_id = simulationID
 
     result, name_map, node_name_map_va_power, node_name_map_pnv_voltage, \
@@ -183,6 +202,8 @@ def init(fid_select, simulationID):
                                     for reg in regs}
     switches = query_model.get_switches(fid_select)
     switch_name_map = {switch['name']: switch['id'] for switch in switches}
+    lines = query_model.get_line_segements(fid_select)
+    line_name_map = {line['name']: line['eqid'] for line in lines}
 
 
 def test():   # fid name open

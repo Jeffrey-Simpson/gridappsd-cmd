@@ -58,44 +58,40 @@ if __name__ == '__main__':
     simulation_id = 966953393
     command_builder.init(fid_select, simulation_id)
 
-    #  LN5593236-6
+    #  Event 3
+    # 	Transformer Alarm	         Switches Opened		Restoration
+    # 	(Planned outage)
+    #
+    # 	TRANSFORMER.HVMV69_11SUB1	LINE.HVMV69S1B1_SW		Close LINE.A8645_48332_SW
+    # 		                        LINE.HVMV69S1B1_SW
 
     # Event 1
     # Open LN0895780_SW
     # 1 close
     # 0 open
-    #  true is 1 and false is 0
-    event1 = command_builder.switch_msg('LN0895780_SW'.lower(), 1, 0)
-    print(event1)
+    event3_1 = command_builder.switch_msg('HVMV69S1B1_SW'.lower(), 1, 0)
+    event3_2 = command_builder.switch_msg('HVMV69S1B1_SW'.lower(), 1, 0)
+    event3 = combine_messages([event3_1, event3_2])
+    print(event3)
 
     #Restore
     # Open LINE.V9111_48332_SW
     # Open LINE.LN0742811_SW
-    # Close LINE.LN0653457_SW
-    # Close LINE.TSW803273_SW
-    restore_msg1 = command_builder.switch_msg('V9111_48332_SW'.lower(), 1, 0)
-    print(restore_msg1)
-    restore_msg2 = command_builder.switch_msg('LN0742811_SW'.lower(), 1, 0)
-    print(restore_msg2)
-    restore_msg3 = command_builder.switch_msg('LN0653457_SW'.lower(), 0, 1)
-    print(restore_msg3)
-    restore_msg4 = command_builder.switch_msg('TSW803273_SW'.lower(), 0, 1)
-    print(restore_msg4)
 
-    restore_msg1 = combine_messages([restore_msg1, restore_msg2, restore_msg3, restore_msg4])
+    restore_msg1 = command_builder.switch_msg('A8645_48332_SW'.lower(), 0, 1)
     print(restore_msg1)
 
     start_time = timegm(strptime('2019-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
 
-    event1_msg = command_builder.create_scheduled_file(event1, start_time + 1*60, start_time + 3*60)
-    print(event1_msg)
-    with open('test_scheduled_event_1_fault.json', 'w') as outfile:
-        json.dump(event1_msg, outfile, indent=2)
+    event3_msg = command_builder.create_scheduled_file(event3, start_time + 1*60, start_time + 3*60)
+    print(event3_msg)
+    with open('test_scheduled_event_3_fault.json', 'w') as outfile:
+        json.dump(event3_msg, outfile, indent=2)
 
     cmd_msg = command_builder.create_scheduled_file(restore_msg1, start_time + 1.5 * 60, start_time + 3.5 * 60)
     print(cmd_msg)
 
-    with open('test_scheduled_event_1_restoration.json', 'w') as outfile:
+    with open('test_scheduled_event_3_restoration.json', 'w') as outfile:
         json.dump(cmd_msg, outfile, indent=2)
     exit(0)
 

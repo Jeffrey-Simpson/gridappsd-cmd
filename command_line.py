@@ -74,6 +74,8 @@ python command_line.py -i 1752306429 -f _EBDB5A4A-543C-9025-243E-8CAD24307380 -s
             # print(json.dumps(command_builder.feeder_name_list,indent=2))
         elif args.list[0].lower() == 's':
             print(json.dumps(command_builder.switch_name_map,indent=2))
+        elif args.list[0].lower() == 'l':
+            print(json.dumps(command_builder.line_name_map,indent=2))
         elif args.list[0].lower() == 'p':
             print(json.dumps(command_builder.pv_name_map,indent=2))
         elif args.list[0].lower() == 'g':

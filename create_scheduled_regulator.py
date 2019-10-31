@@ -35,7 +35,7 @@ if __name__ == '__main__':
     fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44'  # test9500new
     fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'  # ieee123
 
-    simulation_id = 855738958
+    simulation_id = 1264612599
     command_builder.init(fid_select, simulation_id)
 
     msg = command_builder.reg_msg('creg4a', 5, 10)
