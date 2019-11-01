@@ -34,25 +34,6 @@ from calendar import timegm
 import create_comm_outage
 
 if __name__ == '__main__':
-    start_time = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
-    start_time_local = timegm(strptime('2013-07-22 18:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z'))
-
-    print(timegm(strptime('2013-07-22 18:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z')))
-    print(timegm(strptime('2013-07-22 12:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z')))
-    print(timegm(strptime('2013-07-22 12:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z')))
-    print(mktime(strptime('2013-07-22 06:01:00 MST', '%Y-%m-%d %H:%M:%S %Z')))
-
-    print(start_time)
-    print(start_time_local )
-
-    print(datetime.utcfromtimestamp(mktime(strptime('2013-07-22 06:01:00', '%Y-%m-%d %H:%M:%S')) + 1 * 60).strftime("%Y-%m-%d %H:%M:%S"))
-
-    # start_time = timegm(strptime('2019-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
-    # back_to_  =  datetime.utcfromtimestamp(start_time + 60)
-    #
-    # print(datetime.utcfromtimestamp(start_time + 60).strftime("%Y-%m-%d %H:%M:%S"))
-    # exit(0)
-
     fid_select = '_DA00D94F-4683-FD19-15D9-8FF002220115'
     fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'
     # fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44'  # test9500new

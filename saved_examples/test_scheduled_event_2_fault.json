@@ -4,22 +4,22 @@
       "message": {
         "forward_differences": [
           {
-            "object": "_CE091BBD-77FD-4E8D-8815-EEF79D540108",
+            "object": "_31945E03-FCE1-4868-A30B-356C855F12E7",
             "attribute": "TapChanger.step",
             "value": 10
           }
         ],
         "reverse_differences": [
           {
-            "object": "_CE091BBD-77FD-4E8D-8815-EEF79D540108",
+            "object": "_31945E03-FCE1-4868-A30B-356C855F12E7",
             "attribute": "TapChanger.step",
             "value": 5
           }
         ]
       },
       "event_type": "ScheduledCommandEvent",
-      "occuredDateTime": 1563796860,
-      "stopDateTime": 1563797040
+      "occuredDateTime": 1374494460,
+      "stopDateTime": 1374494640
     }
   ],
   "outageEvents": [
@@ -29,10 +29,10 @@
       "tag": "mc45mjk2",
       "inputList": [
         {
-          "name": "vreg3_a",
+          "name": "creg2a",
           "type": "Regulator",
           "mRID": [
-            "_CE091BBD-77FD-4E8D-8815-EEF79D540108"
+            "_31945E03-FCE1-4868-A30B-356C855F12E7"
           ],
           "attribute": "TapChanger.step",
           "phases": [
@@ -45,8 +45,8 @@
       ],
       "outputList": [],
       "event_type": "CommOutage",
-      "startDateTime": "2019-07-22 12:01:00",
-      "stopDateTime": "2019-07-22 12:04:00"
+      "startDateTime": "2013-07-22 06:01:00",
+      "stopDateTime": "2013-07-22 06:04:00"
     }
   ]
 }
