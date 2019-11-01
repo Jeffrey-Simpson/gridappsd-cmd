@@ -40,6 +40,17 @@ outage_event = {
     "stopDateTime": 1374511080  # 38
 }
 
+outage_event_file = {
+    "allOutputOutage": False,
+    "allInputOutage": False,
+    "tag": "mc45mjk2",
+    "inputList": [],
+    "outputList": [],
+    "event_type": "CommOutage",
+    "startDateTime": "2019-07-22 12:01:00",  # 35
+    "stopDateTime": "2019-07-22 12:01:00",  # 38
+}
+
 def create_pv_outage(pv_name_map, pvs):
 
     for pv in pvs:
@@ -61,6 +72,33 @@ def create_reg_outage(reg_name_map, regs):
         outage_event["outputOutageList"].append(reg_name_map[reg]["pos measurement"])
 
     return outage_event
+
+
+def create_reg_outage_file(reg_name_map, regs, startDateTime=1374510900,stopDateTime=1374511080):
+    for reg in regs:
+        obj_template = {"name":reg,
+                        "type":"Regulator",
+                        "mRID": [reg_name_map[reg]["id"]],
+                        "attribute": "TapChanger.step",
+                        "phases":
+                        [{
+                            "phaseLabel": reg_name_map[reg]['phases'][count],
+                            "phaseIndex": count
+                        } for count, phase_name in enumerate(reg_name_map[reg]['phases'])]
+                    }
+        output_template = {
+                    "name": reg,
+                    "type": "Regulator",
+                    "mRID": [reg_name_map[reg]["pos measurement"]],  # measurement
+                    "phases": [phase_name for phase_name in reg_name_map[reg]['phases'] ],
+                    "measurementTypes": ["POS" for phase_name in reg_name_map[reg]['phases'] ]
+                }
+        outage_event_file["inputList"].append(obj_template)
+        # outage_event_file["outputList"].append(output_template) # TODO regulator in output not working yet
+        outage_event_file["startDateTime"] = startDateTime
+        outage_event_file["stopDateTime"] = stopDateTime
+
+    return outage_event_file
 
 def test_9500():
     fid_select = '_EBDB5A4A-543C-9025-243E-8CAD24307380'
@@ -131,7 +169,8 @@ def test_123_reg_schedule():
 
 if __name__ == '__main__':
     # test_9500()
-    test_123_reg_schedule()
+    # test_123_reg_schedule()
+    pass
 
 
 

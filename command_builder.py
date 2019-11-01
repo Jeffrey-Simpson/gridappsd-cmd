@@ -198,7 +198,10 @@ def init(fid_select, simulationID):
     regs = query_model.get_regulator(fid_select)
     # reg_name_map = {reg['rname']: reg['id'] for reg in regs}
     reg_name_map = {reg['rname']: {'id':reg['id'],
-                                   'pos measurement': tap_pos[reg['bus'].upper()+'.'+query_model.lookup[reg['phs'][0]]]}
+                                   'pos measurement': tap_pos[reg['bus'].upper()+'.'+query_model.lookup[reg['phs'][0]]],
+                                   'phases': [phase for phase in reg['phs']],
+                                   'phase_indexes': [str(int(query_model.lookup[phase])-1) for phase in reg['phs']]
+                                   }
                                     for reg in regs}
     switches = query_model.get_switches(fid_select)
     switch_name_map = {switch['name']: switch['id'] for switch in switches}

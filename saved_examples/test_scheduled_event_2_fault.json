@@ -6,20 +6,47 @@
           {
             "object": "_CE091BBD-77FD-4E8D-8815-EEF79D540108",
             "attribute": "TapChanger.step",
-            "value": 5
+            "value": 10
           }
         ],
         "reverse_differences": [
           {
             "object": "_CE091BBD-77FD-4E8D-8815-EEF79D540108",
             "attribute": "TapChanger.step",
-            "value": 10
+            "value": 5
           }
         ]
       },
       "event_type": "ScheduledCommandEvent",
       "occuredDateTime": 1563796860,
-      "stopDateTime": 1563796980
+      "stopDateTime": 1563797040
+    }
+  ],
+  "outageEvents": [
+    {
+      "allOutputOutage": false,
+      "allInputOutage": false,
+      "tag": "mc45mjk2",
+      "inputList": [
+        {
+          "name": "vreg3_a",
+          "type": "Regulator",
+          "mRID": [
+            "_CE091BBD-77FD-4E8D-8815-EEF79D540108"
+          ],
+          "attribute": "TapChanger.step",
+          "phases": [
+            {
+              "phaseLabel": "A",
+              "phaseIndex": 0
+            }
+          ]
+        }
+      ],
+      "outputList": [],
+      "event_type": "CommOutage",
+      "startDateTime": "2019-07-22 12:01:00",
+      "stopDateTime": "2019-07-22 12:04:00"
     }
   ]
 }
