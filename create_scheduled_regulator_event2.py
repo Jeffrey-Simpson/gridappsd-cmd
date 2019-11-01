@@ -34,6 +34,19 @@ from calendar import timegm
 import create_comm_outage
 
 if __name__ == '__main__':
+    start_time = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
+    start_time_local = timegm(strptime('2013-07-22 18:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z'))
+
+    print(timegm(strptime('2013-07-22 18:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z')))
+    print(timegm(strptime('2013-07-22 12:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z')))
+    print(timegm(strptime('2013-07-22 12:01:00 GMT', '%Y-%m-%d %H:%M:%S %Z')))
+    print(mktime(strptime('2013-07-22 06:01:00 MST', '%Y-%m-%d %H:%M:%S %Z')))
+
+    print(start_time)
+    print(start_time_local )
+
+    print(datetime.utcfromtimestamp(mktime(strptime('2013-07-22 06:01:00', '%Y-%m-%d %H:%M:%S')) + 1 * 60).strftime("%Y-%m-%d %H:%M:%S"))
+
     # start_time = timegm(strptime('2019-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
     # back_to_  =  datetime.utcfromtimestamp(start_time + 60)
     #
@@ -42,7 +55,7 @@ if __name__ == '__main__':
 
     fid_select = '_DA00D94F-4683-FD19-15D9-8FF002220115'
     fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'
-    fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44'  # test9500new
+    # fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44'  # test9500new
 
     simulation_id = 1264612599
     command_builder.init(fid_select, simulation_id)
@@ -53,15 +66,18 @@ if __name__ == '__main__':
     # 2013-07-22 10:32:00
 
     reg = 'vreg3_a'
-    # reg = 'creg2a'
+    reg = 'creg2a'
 
-    start_time = timegm(strptime('2019-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
+    start_time = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2013-07-22 06:00:00
+    # start_time_local = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z'))
+    # start_time_local = timegm(strptime('2013-07-22 18:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z'))
+    # 1374516240
     # Transformer.VREG3_A
     msg = command_builder.reg_msg(reg, 10, 5)
 
     tap_event = create_comm_outage.create_reg_outage_file(command_builder.reg_name_map, [reg],
-                                                          datetime.utcfromtimestamp(start_time + 1*60).strftime("%Y-%m-%d %H:%M:%S"),
-                                                          datetime.utcfromtimestamp(start_time + 4*60).strftime("%Y-%m-%d %H:%M:%S"))
+                                                          datetime.fromtimestamp(start_time + 1*60).strftime("%Y-%m-%d %H:%M:%S"),
+                                                          datetime.fromtimestamp(start_time + 4*60).strftime("%Y-%m-%d %H:%M:%S"))
     # "2019-07-22 12:01:00"
     print(json.dumps(tap_event, indent=2))
     with open('test_comm_outage_event_2_fault.json', 'w') as outfile:
