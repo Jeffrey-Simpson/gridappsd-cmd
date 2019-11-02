@@ -57,14 +57,14 @@ if __name__ == '__main__':
     msg = command_builder.reg_msg(reg, 10, 5)
 
     tap_event = create_comm_outage.create_reg_outage_file(command_builder.reg_name_map, [reg],
-                                                          datetime.fromtimestamp(start_time + 1*60).strftime("%Y-%m-%d %H:%M:%S"),
+                                                          datetime.fromtimestamp(start_time + 2*60).strftime("%Y-%m-%d %H:%M:%S"),
                                                           datetime.fromtimestamp(start_time + 4*60).strftime("%Y-%m-%d %H:%M:%S"))
     # "2019-07-22 12:01:00"
     print(json.dumps(tap_event, indent=2))
     with open('test_comm_outage_event_2_fault.json', 'w') as outfile:
         json.dump(tap_event, outfile, indent=2)
 
-    event1_msg = command_builder.create_scheduled_file(msg, start_time + 1*60, start_time + 4*60)
+    event1_msg = command_builder.create_scheduled_file(msg, start_time + 1*60, start_time + 5*60)
     event1_msg['outageEvents'] = [tap_event]
     print(event1_msg)
     with open('test_scheduled_event_2_fault.json', 'w') as outfile:

@@ -19,7 +19,7 @@
       },
       "event_type": "ScheduledCommandEvent",
       "occuredDateTime": 1374494460,
-      "stopDateTime": 1374494640
+      "stopDateTime": 1374494700
     }
   ],
   "outageEvents": [
@@ -45,7 +45,7 @@
       ],
       "outputList": [],
       "event_type": "CommOutage",
-      "startDateTime": "2013-07-22 06:01:00",
+      "startDateTime": "2013-07-22 06:02:00",
       "stopDateTime": "2013-07-22 06:04:00"
     }
   ]
