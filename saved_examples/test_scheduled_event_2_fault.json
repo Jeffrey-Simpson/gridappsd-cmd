@@ -4,14 +4,14 @@
       "message": {
         "forward_differences": [
           {
-            "object": "_31945E03-FCE1-4868-A30B-356C855F12E7",
+            "object": "_CE091BBD-77FD-4E8D-8815-EEF79D540108",
             "attribute": "TapChanger.step",
             "value": 10
           }
         ],
         "reverse_differences": [
           {
-            "object": "_31945E03-FCE1-4868-A30B-356C855F12E7",
+            "object": "_CE091BBD-77FD-4E8D-8815-EEF79D540108",
             "attribute": "TapChanger.step",
             "value": 5
           }
@@ -29,10 +29,10 @@
       "tag": "mc45mjk2",
       "inputList": [
         {
-          "name": "creg2a",
+          "name": "vreg3_a",
           "type": "Regulator",
           "mRID": [
-            "_31945E03-FCE1-4868-A30B-356C855F12E7"
+            "_CE091BBD-77FD-4E8D-8815-EEF79D540108"
           ],
           "attribute": "TapChanger.step",
           "phases": [

@@ -36,7 +36,7 @@ import create_comm_outage
 if __name__ == '__main__':
     fid_select = '_DA00D94F-4683-FD19-15D9-8FF002220115'
     fid_select = '_C1C3E687-6FFD-C753-582B-632A27E28507'
-    # fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44'  # test9500new
+    fid_select = '_AAE94E4A-2465-6F5E-37B1-3E72183A4E44'  # test9500new
 
     simulation_id = 1264612599
     command_builder.init(fid_select, simulation_id)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     # 2013-07-22 10:32:00
 
     reg = 'vreg3_a'
-    reg = 'creg2a'
+    # reg = 'creg2a'
 
     start_time = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2013-07-22 06:00:00
     # start_time_local = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z'))
