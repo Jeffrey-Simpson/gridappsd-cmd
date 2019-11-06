@@ -85,7 +85,7 @@ if __name__ == '__main__':
     restore_msg1 = combine_messages([restore_msg1, restore_msg2, restore_msg3, restore_msg4])
     print(restore_msg1)
 
-    start_time = timegm(strptime('2019-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
+    start_time = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
 
     event1_msg = command_builder.create_scheduled_file(event1, start_time + 1*60, start_time + 3*60)
     print(event1_msg)

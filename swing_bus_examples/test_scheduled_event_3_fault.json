@@ -1,0 +1,35 @@
+{
+  "commandEvents": [
+    {
+      "message": {
+        "forward_differences": [
+          {
+            "object": "_26591B3E-DE3B-4E42-8706-B54D14172791",
+            "attribute": "Switch.open",
+            "value": 1
+          },
+          {
+            "object": "_26591B3E-DE3B-4E42-8706-B54D14172791",
+            "attribute": "Switch.open",
+            "value": 1
+          }
+        ],
+        "reverse_differences": [
+          {
+            "object": "_26591B3E-DE3B-4E42-8706-B54D14172791",
+            "attribute": "Switch.open",
+            "value": 0
+          },
+          {
+            "object": "_26591B3E-DE3B-4E42-8706-B54D14172791",
+            "attribute": "Switch.open",
+            "value": 0
+          }
+        ]
+      },
+      "event_type": "ScheduledCommandEvent",
+      "occuredDateTime": 1374494460,
+      "stopDateTime": 1374494580
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "commandEvents": [
+    {
+      "message": {
+        "forward_differences": [
+          {
+            "object": "_302E3119-B3ED-46A1-87D5-EBC8496357DF",
+            "attribute": "Switch.open",
+            "value": 1
+          }
+        ],
+        "reverse_differences": [
+          {
+            "object": "_302E3119-B3ED-46A1-87D5-EBC8496357DF",
+            "attribute": "Switch.open",
+            "value": 0
+          }
+        ]
+      },
+      "event_type": "ScheduledCommandEvent",
+      "occuredDateTime": 1374494460,
+      "stopDateTime": 1374494580
+    }
+  ]
+}

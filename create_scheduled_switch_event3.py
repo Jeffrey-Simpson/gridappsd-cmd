@@ -81,7 +81,7 @@ if __name__ == '__main__':
     restore_msg1 = command_builder.switch_msg('A8645_48332_SW'.lower(), 0, 1)
     print(restore_msg1)
 
-    start_time = timegm(strptime('2019-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
+    start_time = timegm(strptime('2013-07-22 12:00:00 GMT', '%Y-%m-%d %H:%M:%S %Z')) #  2019-07-22 12:00:00 or for viz 2019-07-22 06:00:00
 
     event3_msg = command_builder.create_scheduled_file(event3, start_time + 1*60, start_time + 3*60)
     print(event3_msg)
