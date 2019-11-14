@@ -4,22 +4,22 @@
       "message": {
         "forward_differences": [
           {
-            "object": "_1B6A5DFD-9ADA-404A-83DF-C9AC89D9323C",
+            "object": "_302E3119-B3ED-46A1-87D5-EBC8496357DF",
             "attribute": "Switch.open",
             "value": 1
           }
         ],
         "reverse_differences": [
           {
-            "object": "_1B6A5DFD-9ADA-404A-83DF-C9AC89D9323C",
+            "object": "_302E3119-B3ED-46A1-87D5-EBC8496357DF",
             "attribute": "Switch.open",
             "value": 0
           }
         ]
       },
       "event_type": "ScheduledCommandEvent",
-      "occuredDateTime": 1248177660,
-      "stopDateTime": 1248177780
+      "occuredDateTime": "2013-07-22 06:01:00",
+      "stopDateTime": "2013-07-22 06:03:00"
     }
   ]
 }
