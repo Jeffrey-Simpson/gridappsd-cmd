@@ -70,7 +70,7 @@ if __name__ == '__main__':
     # 1 close
     # 0 open
     event3_1 = command_builder.switch_msg('HVMV69S1B1_SW'.lower(), 1, 0)
-    event3_2 = command_builder.switch_msg('HVMV69S1B1_SW'.lower(), 1, 0)
+    event3_2 = command_builder.switch_msg('HVMV69S1B2_SW'.lower(), 1, 0)
     event3 = combine_messages([event3_1, event3_2])
     print(event3)
 
